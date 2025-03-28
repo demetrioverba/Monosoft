@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "AMD",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "outDir": "./src/FileCabinet/SuiteScripts",
+    "baseUrl": ".",
+    "rootDir": "../",
+    "paths": {
+      "N/*": [
+        "./node_modules/@hitc/netsuite-types/N/*",
+        "../@hitc/netsuite-types/N/*"
+      ],
+      "N": [
+        "./node_modules/@hitc/netsuite-types/N",
+        "../@hitc/netsuite-types/N"
+      ]
+    }
+  },
+  "exclude": [
+    "__tests__",
+    "__mocks__",
+    "Gulpfile.ts",
+    "deploy.ts",
+    "delivery_functions.ts"
+  ]
+}
