@@ -1,0 +1,18 @@
+<usereventscript scriptid="customscript_ue_bill_of_lading">
+    <name>ue_bill_of_lading.js</name>
+    <notifyowner>T</notifyowner>
+    <description>This script is used to collect the data from the Bill of Lading record and send it to the Google Sheet</description>
+    <scriptfile>[/SuiteScripts/BOL_Google_Sheet/ue_bill_of_lading.js]</scriptfile>
+	<scriptdeployments>
+		<scriptdeployment scriptid="customdeploy_ue_bill_of_lading1">
+		    <status>RELEASED</status>
+		    <title>customdeploy_ue_bill_of_lading1</title>
+		    <isdeployed>T</isdeployed>
+		    <loglevel>DEBUG</loglevel>
+		    <allroles>T</allroles>
+		    <runasrole>ADMINISTRATOR</runasrole>
+		    <executioncontext>ACTION|ADVANCEDREVREC|BANKCONNECTIVITY|BANKSTATEMENTPARSER|BUNDLEINSTALLATION|CLIENT|CONSOLRATEADJUSTOR|CSVIMPORT|CUSTOMGLLINES|CUSTOMMASSUPDATE|DATASETBUILDER|DEBUGGER|EMAILCAPTURE|FICONNECTIVITY|FIPARSER|MAPREDUCE|OCRPLUGIN|OTHER|PAYMENTGATEWAY|PAYMENTPOSTBACK|PLATFORMEXTENSION|PORTLET|PROMOTIONS|RECORDACTION|RESTLET|RESTWEBSERVICES|SCHEDULED|SDFINSTALLATION|SHIPPINGPARTNERS|SUITELET|TAXCALCULATION|USEREVENT|USERINTERFACE|WEBAPPLICATION|WEBSERVICES|WEBSTORE|WORKBOOKBUILDER|WORKFLOW</executioncontext>
+		    <recordtype>ITEMFULFILLMENT</recordtype>
+		</scriptdeployment>
+	</scriptdeployments>
+</usereventscript>

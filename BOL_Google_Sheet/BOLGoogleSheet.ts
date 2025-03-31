@@ -2,9 +2,9 @@ import { BOLNetsuiteData } from "BOLNetsuiteData";
 
 export interface BOLGoogleSheetLine {
     deliveryDate: Date;
-    plantNumber: number;
+    plantNumber: string;
     referenceBOL: string;
-    sapBOL: number;
+    sapBOL: string;
     shipToName: string;
     shipToNumber: number;
     city: string;
@@ -15,35 +15,34 @@ export interface BOLGoogleSheetLine {
     material: number;
     valuationCode: string;
     silo: number;
-    tare: number;
+    tare: string;
     gross: number;
     net: number;
     mode: string;
-    equipmentType: number;
+    equipmentType: string;
 }
 
 export function mapGoogleSheetWithNetsuiteData(data: BOLNetsuiteData): BOLGoogleSheetLine {
-    // 111, 222, 333, 444, 555 are placeholders
-    // Replace them with the actual values from the data object
+
     return {
         deliveryDate: data.recordDate,
-        plantNumber: 111,
+        plantNumber: '5351', // ???
         referenceBOL: data.recordNumber,
-        sapBOL: 222,
+        sapBOL: '842706809', // ???
         shipToName: data.customerName,
         shipToNumber: data.entity,
         city: data.shipAddress,
-        incoterms: `Incoterms 111`,
-        customerPO: `Customer PO 222`,
+        incoterms: data.incoterms === '1915' ? 'FOB' : 'FB', // Needed more safe way to get the value
+        customerPO: data.customerPo,
         carrierCode: data.custbody_mhi_freight_po_vendor,
         truckNumber: data.custbody_truck_id_number,
         material: data.item,
-        valuationCode: `Valuation Code 333`,
-        silo: 333,
-        tare: 444,
+        valuationCode: data.valuationCode,
+        silo: data.silo,
+        tare: data.custbody_trailer_id_number,
         gross: data.custbody_mhi_gross_weight,
         net: data.custbody_netweight,
-        mode: `Mode 444`,
-        equipmentType: 555
-    } as BOLGoogleSheetLine;
+        mode: data.mode,
+        equipmentType: '5000056' // ???
+    }
 }

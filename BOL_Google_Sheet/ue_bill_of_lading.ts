@@ -38,17 +38,19 @@ const isHolcimRelatedBOL = (customer: number) : boolean => {
     return search.lookupFields({ type: search.Type.CUSTOMER, id: customer, columns: [`custentity_is_holcim_related`]}).custentity_is_holcim_related as boolean;
 };
 
-export const afterSubmit: EntryPoints.UserEvent.afterSubmit = (context) => {
+export const afterSubmit: EntryPoints.UserEvent.afterSubmit = (context: EntryPoints.UserEvent.afterSubmitContext) => {
 
-    if (context.type !== context.UserEventType.CREATE && context.type !== context.UserEventType.EDIT) return;
+    // TODO: Replace with CREATE event
+    if (context.type !== context.UserEventType.EDIT) return;
 
     const newRecord = context.newRecord;
     const customer = Number(newRecord.getValue(`entity`));
+    const soRecordId = Number(newRecord.getValue(`createdfrom`));
 
     // Skip processing if the customer is not Holcim related
     if (!isHolcimRelatedBOL(customer)) return;
 
-    const bolData = getBOLNetsuiteData(newRecord.id);
+    const bolData = getBOLNetsuiteData(newRecord.id, soRecordId);
     log.debug({ title: `BOL Data: `, details: bolData });
 
     // Skip processing if there is no data
