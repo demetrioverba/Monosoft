@@ -32,7 +32,7 @@ export function mapGoogleSheetWithNetsuiteData(data: BOLNetsuiteData): BOLGoogle
         shipToName: data.customerName,
         shipToNumber: data.entity,
         city: data.shipAddress,
-        incoterms: data.incoterms === '1915' ? 'FOB' : 'FB', // Needed more safe way to get the value
+        incoterms: data.incoterms === 1915 ? 'FOB' : 'FB', // Needed more safe way to get the value
         customerPO: data.customerPo,
         carrierCode: data.custbody_mhi_freight_po_vendor,
         truckNumber: data.custbody_truck_id_number,

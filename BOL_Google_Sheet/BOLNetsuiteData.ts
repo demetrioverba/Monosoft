@@ -10,7 +10,7 @@ export interface BOLNetsuiteData {
     customerName: string;
     shipAddress: string;
     city: string;
-    incoterms: string;
+    incoterms: number;
     customerPo: string;
     custbody_mhi_freight_po_vendor: string;
     custbody_truck_id_number: string;
@@ -70,7 +70,7 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
         customerName: result.customerName as string,
         shipAddress: result.address_text as string,
         city: result.address_text as string,
-        incoterms: result.shipmethod as string,
+        incoterms: result.shipmethod as number,
         customerPo: result.otherrefnum as string,
         custbody_mhi_freight_po_vendor: result.custbody_mhi_freight_po_vendor as string,
         custbody_truck_id_number: result.custbody_truck_id_number as string,
@@ -96,7 +96,7 @@ export function exampleBOLNetsuiteData(): BOLNetsuiteData {
         customerName: `C02643 Jewell/Oldcastle (Holcim)`,
         shipAddress: `Jewell/Oldcastle (Holcim)\nUnited States`,
         city: `Jewell/Oldcastle (Holcim)\nUnited States`,
-        incoterms: `1915`,
+        incoterms: 1915,
         customerPo: `123456789`,
         custbody_mhi_freight_po_vendor: ``,
         custbody_truck_id_number: `22`,
