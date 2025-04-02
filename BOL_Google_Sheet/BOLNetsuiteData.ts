@@ -1,12 +1,11 @@
 import { getSqlResultAsMap } from './HelperFunctions';
+
 export interface BOLNetsuiteData {
     recordId: number;
     recordNumber: string;
-    // recordDate: string
+    recordDate: string
     entity: number;
-    // plantNumber: number;
     tranid: string;
-    // sapbol: number;
     customerName: string;
     shipAddress: string;
     city: string;
@@ -20,7 +19,6 @@ export interface BOLNetsuiteData {
     custbody_trailer_id_number: string;
     custbody_mhi_gross_weight: number;
     custbody_netweight: number;
-    mode: string;
 }
 
 export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOLNetsuiteData | null {
@@ -29,6 +27,7 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
         tr.id,
         tr.entity,
         tr.tranid,
+        tr.trandate,
         tr.BUILTIN.DF(tr.entity) as customer_name,
         tr.BUILTIN.DF(tr.shippingaddress) as address_text,
         tr.custbody_mhi_freight_po_vendor,
@@ -56,6 +55,8 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
         WHERE
         tr.id = ${bolRecordId}
     `;
+    // BOL: 69791
+    // SO: 69790
     const results = getSqlResultAsMap(sql);
     
     if (!results.length) return null;
@@ -64,7 +65,7 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
     const data: BOLNetsuiteData = {
         recordId: result.id as number,
         recordNumber: result.tranid as string,
-        // recordDate: formatDate(new Date()),
+        recordDate: result.trandate as string,
         entity: result.entity as number,
         tranid: result.tranid as string,
         customerName: result.customer_name as string,
@@ -80,7 +81,6 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
         custbody_trailer_id_number: result.custbody_trailer_id_number as string,
         custbody_mhi_gross_weight: result.custbody_mhi_gross_weight as number,
         custbody_netweight: result.custbody_netweight as number,
-        mode: `Truck`
     };
 
     return data;
@@ -90,7 +90,7 @@ export function exampleBOLNetsuiteData(): BOLNetsuiteData {
     return {
         recordId: 69791,
         recordNumber: `PEN-BOL2016`,
-        // recordDate: '1/13/2025',
+        recordDate: `3/28/2025`,
         entity: 10530,
         tranid: `PEN-BOL2016`,
         customerName: `C02643 Jewell/Oldcastle (Holcim)`,
@@ -106,6 +106,5 @@ export function exampleBOLNetsuiteData(): BOLNetsuiteData {
         custbody_trailer_id_number: `33`,
         custbody_mhi_gross_weight: 51555,
         custbody_netweight: 5105,
-        mode: `Truck`
     };
 }

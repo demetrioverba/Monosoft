@@ -1,5 +1,4 @@
 import { BOLNetsuiteData } from "BOLNetsuiteData";
-import {formatDate} from "./HelperFunctions";   
 
 export interface BOLGoogleSheetLine {
     deliveryDate: string;
@@ -26,14 +25,14 @@ export interface BOLGoogleSheetLine {
 export function mapGoogleSheetWithNetsuiteData(data: BOLNetsuiteData): BOLGoogleSheetLine {
 
     return {
-        deliveryDate: formatDate(new Date()),
-        plantNumber: '5351', // ???
+        deliveryDate: data.recordDate,
+        plantNumber: '5351', // hardcoded - OK
         referenceBOL: data.recordNumber,
-        sapBOL: '842706809', // ???
+        sapBOL: '', // blank - OK
         shipToName: data.customerName,
         shipToNumber: data.entity,
         city: data.shipAddress,
-        incoterms: data.incoterms === 1915 ? 'FOB' : 'FB', // Needed more safe way to get the value, or map from NEW RECORD
+        incoterms: data.incoterms === 1915 ? 'FOB' : 'FP', // Needed more safe way to get the value, or map from NEW RECORD
         customerPO: data.customerPo,
         carrierCode: data.custbody_mhi_freight_po_vendor || '',
         truckNumber: data.custbody_truck_id_number,
@@ -43,14 +42,14 @@ export function mapGoogleSheetWithNetsuiteData(data: BOLNetsuiteData): BOLGoogle
         tare: data.custbody_trailer_id_number,
         gross: data.custbody_mhi_gross_weight,
         net: data.custbody_netweight,
-        mode: data.mode,
-        equipmentType: '5000056' // ???
+        mode: 'Truck', // hardcoded - OK
+        equipmentType: '5000056' // hardcoded - OK
     }
 }
 
 export function exampleBOLGoogleSheetLine(): BOLGoogleSheetLine {
     return {
-        deliveryDate: '1/13/2025',
+        deliveryDate: '3/28/2025',
         plantNumber: '5351',
         referenceBOL: 'PEN-BOL2016',
         sapBOL: '842706809',
