@@ -7,29 +7,58 @@
  * @NName ue_bill_of_lading.js
  */
 
-import {log, search} from 'N';
+import {log, search, https, runtime} from 'N';
 import {EntryPoints} from "N/types";
 import {getBOLNetsuiteData} from "./BOLNetsuiteData";
 import {mapGoogleSheetWithNetsuiteData} from "./BOLGoogleSheet";
 
-// 1 - Create a new function to send the data to the Google Sheet when the record is created
+const sendToGoogleSheet = (lineData: any, accessTokens: any) => {
 
-// const sendToGoogleSheet = (data: any) => {
-//     // 6 - Create the URL of the Google Sheet
-//     const url = 'https://script.google.com/macros/s/AKfycbz6u1Q9zXz8s3k4QY2b2QbGyM9y2A/exec';
+    // Get the Access Token from Script Parameter
+    const {clientId, clientSecret, refreshToken, tokenUrl, sheetId} = accessTokens;
 
-//     // 7 - Create the options object
-//     const options = {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(data)
-//     };
+    const postBody = `grant_type=refresh_token`
+        + `&refresh_token=` + encodeURIComponent(refreshToken)
+        + `&client_id=` + encodeURIComponent(clientId)
+        + `&client_secret=` + encodeURIComponent(clientSecret);
 
-//     // 8 - Call the NetSuite API to send the data to the Google Sheet
-//     const response = fetch(url, options);
-// }
+    const responseToken = https.post({
+        url: tokenUrl,
+        body: postBody,
+        headers: { 'Content-Type': `application/x-www-form-urlencoded` }
+    });
+
+    if (responseToken.code !== 200) {
+        log.debug(`UE Error`, `The following response was received while trying to get AccessToken: ${JSON.stringify(responseToken)}`);
+        return null;
+    }
+
+    const accessToken = JSON.parse(responseToken.body).access_token;
+
+    // Call the function to send the data to the Google Sheet
+    const baseUrl = `https://sheets.googleapis.com/v4/spreadsheets/`;
+    const range = `Page1!A:A`;    
+    const values = [Object.values(lineData)];
+    const url = `${baseUrl}${sheetId}/values/${encodeURIComponent(range)}:append?valueInputOption=RAW`;
+    const headers = {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': `application/json`,
+    };
+
+    const requestBody = { values };
+
+    try {
+        const response = https.post({
+            url,
+            headers,
+            body: JSON.stringify(requestBody),
+        });
+
+        log.debug(`Google Sheets API Response`, response.body);
+    } catch (error) {
+        log.error(`Google Sheets API Error`, error);
+    }
+}
 
 
 
@@ -42,10 +71,19 @@ export const afterSubmit: EntryPoints.UserEvent.afterSubmit = (context: EntryPoi
 
     // TODO: Replace with CREATE event
     if (context.type !== context.UserEventType.EDIT) return;
-
+    
     const newRecord = context.newRecord;
     const customer = Number(newRecord.getValue(`entity`));
     const soRecordId = Number(newRecord.getValue(`createdfrom`));
+    const currentScript = runtime.getCurrentScript();
+    const clientId = currentScript.getParameter({ name: `custscript_holcim_gs_token_client_id` });
+    const clientSecret = currentScript.getParameter({ name: `custscript_holcim_gs_token_secret` });
+    const refreshToken = currentScript.getParameter({ name: `custscript_holcim_gs_token_refresh` });
+    const tokenUrl = currentScript.getParameter({ name: `custscript_holcim_gs_token_url` });
+    const sheetId = currentScript.getParameter({ name: `custscript_holcim_gs_token_sheet_id` });
+
+    // Skip processing if any of the access tokens are missing
+    if (!clientId || !clientSecret || !refreshToken || !tokenUrl || !sheetId) return;
 
     // Skip processing if the customer is not Holcim related
     if (!isHolcimRelatedBOL(customer)) return;
@@ -57,11 +95,10 @@ export const afterSubmit: EntryPoints.UserEvent.afterSubmit = (context: EntryPoi
     if (!bolData) return;
 
     const bolToSheet = mapGoogleSheetWithNetsuiteData(bolData);
+    const accessTokens = { clientId, clientSecret, refreshToken, tokenUrl, sheetId };
+    
     log.debug({ title: `Google Sheet Data: `, details: JSON.stringify(bolToSheet) });
 
-
-
-    // 5 - Call the function to send the data to the Google Sheet
-    // sendToGoogleSheet(data);
+    sendToGoogleSheet(bolToSheet, accessTokens);
 };
 

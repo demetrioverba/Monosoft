@@ -2,7 +2,7 @@ import { getSqlResultAsMap } from './HelperFunctions';
 export interface BOLNetsuiteData {
     recordId: number;
     recordNumber: string;
-    recordDate: Date;
+    // recordDate: string
     entity: number;
     // plantNumber: number;
     tranid: string;
@@ -29,7 +29,7 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
         tr.id,
         tr.entity,
         tr.tranid,
-        tr.BUILTIN.DF(tr.entity) as customerName,
+        tr.BUILTIN.DF(tr.entity) as customer_name,
         tr.BUILTIN.DF(tr.shippingaddress) as address_text,
         tr.custbody_mhi_freight_po_vendor,
         tr.custbody_truck_id_number,
@@ -64,10 +64,10 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
     const data: BOLNetsuiteData = {
         recordId: result.id as number,
         recordNumber: result.tranid as string,
-        recordDate: new Date(),
+        // recordDate: formatDate(new Date()),
         entity: result.entity as number,
         tranid: result.tranid as string,
-        customerName: result.customerName as string,
+        customerName: result.customer_name as string,
         shipAddress: result.address_text as string,
         city: result.address_text as string,
         incoterms: result.shipmethod as number,
@@ -90,7 +90,7 @@ export function exampleBOLNetsuiteData(): BOLNetsuiteData {
     return {
         recordId: 69791,
         recordNumber: `PEN-BOL2016`,
-        recordDate: new Date(),
+        // recordDate: '1/13/2025',
         entity: 10530,
         tranid: `PEN-BOL2016`,
         customerName: `C02643 Jewell/Oldcastle (Holcim)`,
