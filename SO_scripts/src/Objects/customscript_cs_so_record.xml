@@ -1,0 +1,18 @@
+<clientscript scriptid="customscript_cs_so_record">
+    <name>cs_so_record.js</name>
+    <notifyowner>T</notifyowner>
+    <description>Client script for Sales Order record</description>
+    <scriptfile>[/SuiteScripts/SO_scripts/cs_so_record.js]</scriptfile>
+	<scriptdeployments>
+		<scriptdeployment scriptid="customdeploy_cs_so_record1">
+		    <status>RELEASED</status>
+		    <title>customdeploy_cs_so_record1</title>
+		    <isdeployed>T</isdeployed>
+		    <loglevel>DEBUG</loglevel>
+		    <allroles>T</allroles>
+		    <runasrole>ADMINISTRATOR</runasrole>
+		    <executioncontext>USERINTERFACE</executioncontext>
+		    <recordtype>SALESORDER</recordtype>
+		</scriptdeployment>
+	</scriptdeployments>
+</clientscript>

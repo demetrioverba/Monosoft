@@ -1,0 +1,18 @@
+<usereventscript scriptid="customscript_ue_so_record">
+    <name>ue_so_record.js</name>
+    <notifyowner>T</notifyowner>
+    <description>User Event Script for Sales Order record</description>
+    <scriptfile>[/SuiteScripts/SO_scripts/ue_so_record.js]</scriptfile>
+	<scriptdeployments>
+		<scriptdeployment scriptid="customdeploy_ue_so_record1">
+		    <status>RELEASED</status>
+		    <title>customdeploy_ue_so_record1</title>
+		    <isdeployed>T</isdeployed>
+		    <loglevel>DEBUG</loglevel>
+		    <allroles>T</allroles>
+		    <runasrole>ADMINISTRATOR</runasrole>
+		    <executioncontext>ACTION|ADVANCEDREVREC|BANKCONNECTIVITY|BANKSTATEMENTPARSER|BUNDLEINSTALLATION|CLIENT|CONSOLRATEADJUSTOR|CSVIMPORT|CUSTOMGLLINES|CUSTOMMASSUPDATE|DATASETBUILDER|DEBUGGER|EMAILCAPTURE|FICONNECTIVITY|FIPARSER|MAPREDUCE|OCRPLUGIN|OTHER|PAYMENTGATEWAY|PAYMENTPOSTBACK|PLATFORMEXTENSION|PORTLET|PROMOTIONS|RECORDACTION|RESTLET|RESTWEBSERVICES|SCHEDULED|SDFINSTALLATION|SHIPPINGPARTNERS|SUITELET|TAXCALCULATION|USEREVENT|USERINTERFACE|WEBAPPLICATION|WEBSERVICES|WEBSTORE|WORKBOOKBUILDER|WORKFLOW</executioncontext>
+		    <recordtype>SALESORDER</recordtype>
+		</scriptdeployment>
+	</scriptdeployments>
+</usereventscript>
