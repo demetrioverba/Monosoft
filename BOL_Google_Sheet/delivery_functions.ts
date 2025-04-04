@@ -461,6 +461,48 @@ function checkScriptName(fileName: string, fileText: string): string[] {
     return []
 }
 
+function countInclusions(text: string, substring: string): number {
+    let count: number = 0;
+    let position: number = text.indexOf(substring);
+
+    while (position !== -1) {
+        count++;
+        position = text.indexOf(substring, position + 1);
+    }
+
+    return count;
+}
+
+function checkFlushLogs(fileName: string, fileText: string): string[] {
+    if (!fileText.includes(`createDebugLogger(`) && !fileText.includes(`writeToFile: true`)) {
+        return [];
+    }
+
+    const flushFunctions = countInclusions(fileText, `flushLogs()`)
+    let debugLoggers = countInclusions(fileText, `createDebugLogger(`)
+    let code = fileText
+    let writeFlags: number = 0
+
+    while (debugLoggers > 0) {
+        const start: number = code.indexOf(`createDebugLogger(`)
+        const sliced = code.slice(start)
+        const end: number = start + sliced.indexOf(`)`) + 1
+        const debugLoggerCode = code.slice(start, end);
+
+        if (debugLoggerCode.includes(`writeToFile: true`)) {
+            writeFlags++;
+        }
+        code = code.replace(debugLoggerCode, ``);
+        debugLoggers--;
+    }
+
+    if (flushFunctions < writeFlags) {
+        return [`File "${fileName}". Amount of 'createDebugLogger()' with 'writeToFile' option - (${writeFlags}) is greater than 'flushLogs()' - (${flushFunctions}) in the code`];
+    }
+
+    return [];
+}
+
 function checkClientScriptImports (fileName: string, fileContent: string, allScripts: {[name: string]: string}): string[] {
     // Checks if a client script contains improper imports
     if (!fileIsRootScript(fileContent)) {
@@ -509,6 +551,31 @@ function checkClientScriptImports (fileName: string, fileContent: string, allScr
     return result;
 }
 
+function checkManifestDependencies(fileName: string, fileText: string, manifestFileText: string): string[] {
+    const customFields: string[] = [];
+    const regex = /<object>(.*?)<\/object>/g;
+    let match;
+    customFields.push(...getCustomObjectNames(fileText));
+
+    while ((match = regex.exec(manifestFileText)) !== null) {
+        customFields.push(match[1]);
+    }
+
+    const resultObjects = Array.from(new Set(customFields));
+    if (resultObjects.length > 0 && !manifestFileText.includes(`<objects>`)) {
+        manifestFileText = manifestFileText.replace(`</dependencies>`, `<objects></objects>\n</dependencies>`);
+    }
+    const objectsString = resultObjects.map(result => `<object>${result}</object>`).join(`\n`);
+
+    // Replace the content between <objects> and </objects> with the objectsString
+    const updatedXmlData = manifestFileText.replace(/(<objects>)[\s\S]*?(<\/objects>)/, `$1\n${objectsString}\n$2`);
+    if (updatedXmlData !== manifestFileText) {
+        return [`File "${fileName}". Custom objects were used (${resultObjects}) in the code but not included in manifest.xml.\nCorrect manifest.xml should look the following way:\n${updatedXmlData}`];
+    }
+
+    return [];
+}
+
 export function sanityChecks(files: {[name: string]: string}, manifestContent: string): string[] {
     /*
     Perform sanity checks before deployment
@@ -521,12 +588,13 @@ export function sanityChecks(files: {[name: string]: string}, manifestContent: s
         errors.push(...checkUEScriptUsesTextFunctions(fileName, fileText));
         errors.push(...checkServerScriptsManifest(fileName, fileText, manifestContent))
         errors.push(...checkClientScriptImports(fileName, fileText, files))
-
+        errors.push(...checkFlushLogs(fileName, fileText))
+        errors.push(...checkManifestDependencies(fileName, fileText, manifestContent))
     }
     return errors;
 }
 
-function getUniqueOccurrences(text: string): string[] {
+function getCustomObjectNames(text: string): string[] {
     const prefixes = [`custbody`, `custentity`, `custitem`, `custcol`, `custitemnumber`, `custrecord`];
     const regex = new RegExp(`\\b(${prefixes.join(`|`)})\\w*\\b`, `g`);
     const matches = text.match(regex) || [];
@@ -540,7 +608,7 @@ export function addDependenciesToManifest(): boolean {
     const customFields: string[] = [];
     for (const f of tsFiles) {
         const fileContents = readFileSync(f, `utf8`);
-        customFields.push(...getUniqueOccurrences(fileContents));
+        customFields.push(...getCustomObjectNames(fileContents));
     }
     // const allCustomFields = Array.from(new Set(customFields))
 
@@ -559,6 +627,29 @@ export function addDependenciesToManifest(): boolean {
     console.log(updatedXmlData);
     writeFileSync(`./src/manifest.xml`, updatedXmlData);
     return true;
+}
+
+export function import_custom_objects() {
+    try {
+        console.log(`Checking files`, `\n`);
+        const tsFiles = readdirSync(`./`)
+            .filter(file => path.extname(file) === `.ts`)
+            .filter(file => [`delivery_functions.ts`].indexOf(file) < 0);
+        const customFields: string[] = [];
+        for (const f of tsFiles) {
+            const fileContents = readFileSync(f, `utf8`);
+            customFields.push(...getCustomObjectNames(fileContents));
+        }
+        console.log(`Found custom objects. Trying to download`, `\n`)
+        console.log(`suitecloud object:import --type ALL --destinationfolder "/Objects" --scriptid ${customFields.join(` `)}`);
+        execSync(`suitecloud object:import --type ALL --destinationfolder "/Objects" --scriptid ${customFields.join(` `)}`, { stdio: `inherit` });
+
+        return true;
+
+    } catch (error) {
+        console.error(`An error occurred: ${error}`);
+        return false;
+    }
 }
 
 export function build(): boolean {

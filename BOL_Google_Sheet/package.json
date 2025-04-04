@@ -6,6 +6,7 @@
     "postinstall": "shx cp -rn ./node_modules/netsuite-libs/config/. ./ && shx mv ./gtignr ./.gitignore && ts-node -P tsconfig-tsnode.json -e \"import { generate_tsconfig } from './delivery_functions'; generate_tsconfig();\"",
     "test": "jest",
     "lint": "eslint . --fix",
+    "import_custom_objects": "ts-node -P tsconfig-tsnode.json -e \"import { import_custom_objects } from './delivery_functions'; import_custom_objects();",
     "build": "ts-node -P tsconfig-tsnode.json -e \"import { build } from './delivery_functions'; build();\"",
     "upload_files": "ts-node -P tsconfig-tsnode.json -e \"import { uploadFiles } from './delivery_functions'; uploadFiles();\"",
     "deploy": "ts-node -P tsconfig-tsnode.json -e \"import { deploy } from './delivery_functions'; deploy();\"",
