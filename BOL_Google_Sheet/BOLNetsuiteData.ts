@@ -39,7 +39,7 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
         trl.item,
         tr_so.shipmethod,
         tr_so.otherrefnum,
-        tr_so.custbody_holcim_valuation_no
+        val_type.custrecord_valuation_type,
 
         FROM
         transaction tr
@@ -51,6 +51,9 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
         LEFT JOIN
         transaction tr_so
         ON tr_so.id = ${soRecordId}
+
+        LEFT JOIN customrecord_valuation_num val_type
+        ON tr_so.custbody_valuation_type = val_type.id
 
         WHERE
         tr.id = ${bolRecordId}
@@ -76,7 +79,7 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
         custbody_mhi_freight_po_vendor: result.custbody_mhi_freight_po_vendor as string,
         custbody_truck_id_number: result.custbody_truck_id_number as string,
         item: result.item as number,
-        valuationCode: result.custbody_holcim_valuation_no as string,
+        valuationCode: result.custrecord_valuation_type as string,
         silo: result.custbody_holcim_silo_no as number,
         custbody_trailer_id_number: result.custbody_trailer_id_number as string,
         custbody_mhi_gross_weight: result.custbody_mhi_gross_weight as number,
