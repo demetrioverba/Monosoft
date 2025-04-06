@@ -11,7 +11,7 @@ export interface BOLNetsuiteData {
     city: string;
     incoterms: number;
     customerPo: string;
-    custbody_mhi_freight_po_vendor: string;
+    custentity_holcim_carrier_code: string;
     custbody_truck_id_number: string;
     item: number;
     valuationCode: string;
@@ -30,7 +30,6 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
         tr.trandate,
         tr.BUILTIN.DF(tr.entity) as customer_name,
         tr.BUILTIN.DF(tr.shippingaddress) as address_text,
-        tr.custbody_mhi_freight_po_vendor,
         tr.custbody_truck_id_number,
         tr.custbody_mhi_gross_weight,
         tr.custbody_netweight,
@@ -40,6 +39,7 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
         tr_so.shipmethod,
         tr_so.otherrefnum,
         val_type.custrecord_valuation_type,
+        ven.custentity_holcim_carrier_code,
 
         FROM
         transaction tr
@@ -55,11 +55,18 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
         LEFT JOIN customrecord_valuation_num val_type
         ON tr_so.custbody_valuation_type = val_type.id
 
+        LEFT JOIN vendor ven
+        ON tr.custbody_mhi_freight_po_vendor = ven.id
+
         WHERE
         tr.id = ${bolRecordId}
     `;
     // BOL: 69791
     // SO: 69790
+
+    // For testing purposes (Vendor)
+    // BOL: 7904
+    // SO: 7843
     const results = getSqlResultAsMap(sql);
     
     if (!results.length) return null;
@@ -76,7 +83,7 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
         city: result.address_text as string,
         incoterms: result.shipmethod as number,
         customerPo: result.otherrefnum as string,
-        custbody_mhi_freight_po_vendor: result.custbody_mhi_freight_po_vendor as string,
+        custentity_holcim_carrier_code: result.custentity_holcim_carrier_code as string,
         custbody_truck_id_number: result.custbody_truck_id_number as string,
         item: result.item as number,
         valuationCode: result.custrecord_valuation_type as string,
@@ -101,7 +108,7 @@ export function exampleBOLNetsuiteData(): BOLNetsuiteData {
         city: `Jewell/Oldcastle (Holcim)\nUnited States`,
         incoterms: 1915,
         customerPo: `123456789`,
-        custbody_mhi_freight_po_vendor: ``,
+        custentity_holcim_carrier_code: `123456789`,
         custbody_truck_id_number: `22`,
         item: 106,
         valuationCode: `I046`,

@@ -34,7 +34,7 @@ export function mapGoogleSheetWithNetsuiteData(data: BOLNetsuiteData): BOLGoogle
         city: data.shipAddress,
         incoterms: data.incoterms === 1915 ? 'FOB' : 'FP', // Needed more safe way to get the value, or map from NEW RECORD
         customerPO: data.customerPo,
-        carrierCode: data.custbody_mhi_freight_po_vendor || '',
+        carrierCode: data.custentity_holcim_carrier_code,
         truckNumber: data.custbody_truck_id_number,
         material: data.item,
         valuationCode: data.valuationCode,
