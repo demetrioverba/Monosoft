@@ -6,7 +6,7 @@ export interface BOLGoogleSheetLine {
     referenceBOL: string;
     sapBOL: string;
     shipToName: string;
-    shipToNumber: number;
+    shipToNumber: string;
     city: string;
     incoterms: string;
     customerPO: string;
@@ -30,8 +30,8 @@ export function mapGoogleSheetWithNetsuiteData(data: BOLNetsuiteData): BOLGoogle
         referenceBOL: data.recordNumber,
         sapBOL: '', // blank - OK
         shipToName: data.customerName,
-        shipToNumber: data.entity,
-        city: data.shipAddress,
+        shipToNumber: data.address[0].custrecord_holcim_shipto_addres,
+        city: data.address[0].city,
         incoterms: data.incoterms === 1915 ? 'FOB' : 'FP', // Needed more safe way to get the value, or map from NEW RECORD
         customerPO: data.customerPo,
         carrierCode: data.custentity_holcim_carrier_code,
@@ -54,7 +54,7 @@ export function exampleBOLGoogleSheetLine(): BOLGoogleSheetLine {
         referenceBOL: 'PEN-BOL2016',
         sapBOL: '842706809',
         shipToName: 'C02643 Jewell/Oldcastle (Holcim)',
-        shipToNumber: 10530,
+        shipToNumber: '10530',
         city: 'Jewell/Oldcastle (Holcim)\nUnited States',
         incoterms: 'FOB',
         customerPO: '123456789',
