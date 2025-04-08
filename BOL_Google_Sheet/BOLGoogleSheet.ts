@@ -30,8 +30,8 @@ export function mapGoogleSheetWithNetsuiteData(data: BOLNetsuiteData): BOLGoogle
         referenceBOL: data.recordNumber,
         sapBOL: '', // blank - OK
         shipToName: data.customerName,
-        shipToNumber: data.address[0].custrecord_holcim_shipto_addres,
-        city: data.address[0].city,
+        shipToNumber: data.custrecord_holcim_shipto_addres,
+        city: data.city,
         incoterms: data.incoterms === 1915 ? 'FOB' : 'FP', // Needed more safe way to get the value, or map from NEW RECORD
         customerPO: data.customerPo,
         carrierCode: data.custentity_holcim_carrier_code,
