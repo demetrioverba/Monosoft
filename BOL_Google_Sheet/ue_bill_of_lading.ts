@@ -15,7 +15,7 @@ import {mapGoogleSheetWithNetsuiteData} from "./BOLGoogleSheet";
 const sendToGoogleSheet = (lineData: any, accessTokens: any) => {
 
     // Get the Access Token from Script Parameter
-    const {clientId, clientSecret, refreshToken, tokenUrl, sheetId} = accessTokens;
+    const {clientId, clientSecret, refreshToken, tokenUrl, sheetId, gsPageName} = accessTokens;
 
     const postBody = `grant_type=refresh_token`
         + `&refresh_token=` + encodeURIComponent(refreshToken)
@@ -37,7 +37,7 @@ const sendToGoogleSheet = (lineData: any, accessTokens: any) => {
 
     // Call the function to send the data to the Google Sheet
     const baseUrl = `https://sheets.googleapis.com/v4/spreadsheets/`;
-    const range = `Page1!A:A`;    
+    const range = `${gsPageName}!A:A`;
     const values = [Object.values(lineData)];
     const url = `${baseUrl}${sheetId}/values/${encodeURIComponent(range)}:append?valueInputOption=RAW`;
     const headers = {
@@ -81,9 +81,10 @@ export const afterSubmit: EntryPoints.UserEvent.afterSubmit = (context: EntryPoi
     const refreshToken = currentScript.getParameter({ name: `custscript_holcim_gs_token_refresh` });
     const tokenUrl = currentScript.getParameter({ name: `custscript_holcim_gs_token_url` });
     const sheetId = currentScript.getParameter({ name: `custscript_holcim_gs_token_sheet_id` });
+    const gsPageName = currentScript.getParameter({ name: `custscript_holcim_gs_page` });
 
     // Skip processing if any of the access tokens are missing
-    if (!clientId || !clientSecret || !refreshToken || !tokenUrl || !sheetId) return;
+    if (!clientId || !clientSecret || !refreshToken || !tokenUrl || !sheetId || !gsPageName) return;
 
     // Skip processing if the customer is not Holcim related
     if (!isHolcimRelatedBOL(customer)) return;
@@ -95,7 +96,7 @@ export const afterSubmit: EntryPoints.UserEvent.afterSubmit = (context: EntryPoi
     if (!bolData) return;
 
     const bolToSheet = mapGoogleSheetWithNetsuiteData(bolData);
-    const accessTokens = { clientId, clientSecret, refreshToken, tokenUrl, sheetId };
+    const accessTokens = { clientId, clientSecret, refreshToken, tokenUrl, sheetId, gsPageName };
     
     log.debug({ title: `Google Sheet Data: `, details: JSON.stringify(bolToSheet) });
 
