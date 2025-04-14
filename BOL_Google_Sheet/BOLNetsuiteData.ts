@@ -8,11 +8,13 @@ export interface BOLNetsuiteData {
     entity: number;
     tranid: string;
     customerName: string;
+    holcimSoldTo: number;
     city: string;
     country: string;
     custrecord_holcim_shipto_addres: string;
     incoterms: number;
     customerPo: string;
+    vendorName: string;
     custentity_holcim_carrier_code: string;
     custbody_truck_id_number: string;
     item: number;
@@ -42,9 +44,11 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
         tr_so.otherrefnum,
         val_type.custrecord_valuation_type,
         ven.custentity_holcim_carrier_code,
+        ven.companyname as vendor_name,
         ea.city,
         ea.country,
         ea.custrecord_holcim_shipto_addres,
+        cust.custentity_holcim_sold_to
 
         FROM
         transaction tr
@@ -65,6 +69,9 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
 
         LEFT JOIN entityAddressbook a ON tr.entity = a.entity AND a.addressbookaddress = tr.shippingaddress
         LEFT JOIN EntityAddress ea ON a.addressbookaddress = ea.nkey
+
+        LEFT JOIN customer cust
+        ON tr.entity = cust.id
 
         WHERE
         tr.id = ${bolRecordId}
@@ -90,11 +97,13 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
         entity: result.entity as number,
         tranid: result.tranid as string,
         customerName: result.customer_name as string,
+        holcimSoldTo: result.custentity_holcim_sold_to as number,
         city: result.city as string,
         country: result.country as string,
         custrecord_holcim_shipto_addres: result.custrecord_holcim_shipto_addres as string,
         incoterms: result.shipmethod as number,
         customerPo: result.otherrefnum as string,
+        vendorName: result.vendor_name as string,
         custentity_holcim_carrier_code: result.custentity_holcim_carrier_code as string,
         custbody_truck_id_number: result.custbody_truck_id_number as string,
         item: result.item as number,
@@ -116,11 +125,13 @@ export function exampleBOLNetsuiteData(): BOLNetsuiteData {
         entity: 10530,
         tranid: `PEN-BOL2016`,
         customerName: `C02643 Jewell/Oldcastle (Holcim)`,
+        holcimSoldTo: 333,
         city: 'New York',
         country: 'US',
         custrecord_holcim_shipto_addres: `111222`,
         incoterms: 1915,
         customerPo: `123456789`,
+        vendorName: `CENTRAL CAROLINA SCALE`,
         custentity_holcim_carrier_code: `123456789`,
         custbody_truck_id_number: `22`,
         item: 106,
