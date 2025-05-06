@@ -1,4 +1,4 @@
-<entitycustomfield scriptid="custentity_is_holcim_related">
+<entitycustomfield scriptid="custentity_holcim_sold_to">
   <accesslevel>2</accesslevel>
   <appliestocontact>F</appliestocontact>
   <appliestocustomer>T</appliestocustomer>
@@ -17,20 +17,20 @@
   <defaultchecked>F</defaultchecked>
   <defaultselection></defaultselection>
   <defaultvalue></defaultvalue>
-  <description>Check this check box if the current Customer is Holcim-related</description>
+  <description></description>
   <displayheight></displayheight>
   <displaytype>NORMAL</displaytype>
   <displaywidth></displaywidth>
   <dynamicdefault></dynamicdefault>
   <enabletextenhance>F</enabletextenhance>
   <encryptatrest>F</encryptatrest>
-  <fieldtype>CHECKBOX</fieldtype>
-  <globalsearch>F</globalsearch>
-  <help>Check this check box if the current Customer is Holcim-related</help>
+  <fieldtype>TEXT</fieldtype>
+  <globalsearch>T</globalsearch>
+  <help></help>
   <isformula>F</isformula>
   <ismandatory>F</ismandatory>
   <isparent>F</isparent>
-  <label>Holcim</label>
+  <label>Holcim Sold To</label>
   <linktext></linktext>
   <maxlength></maxlength>
   <maxvalue></maxvalue>
@@ -42,7 +42,7 @@
   <searchlevel>2</searchlevel>
   <selectrecordtype></selectrecordtype>
   <showhierarchy>F</showhierarchy>
-  <showinlist>T</showinlist>
+  <showinlist>F</showinlist>
   <sourcefilterby></sourcefilterby>
   <sourcefrom></sourcefrom>
   <sourcelist></sourcelist>

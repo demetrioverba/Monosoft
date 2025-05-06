@@ -1,7 +1,7 @@
-<entitycustomfield scriptid="custentity_is_holcim_related">
+<entitycustomfield scriptid="custentity_holcim_carrier_code">
   <accesslevel>2</accesslevel>
   <appliestocontact>F</appliestocontact>
-  <appliestocustomer>T</appliestocustomer>
+  <appliestocustomer>F</appliestocustomer>
   <appliestoemployee>F</appliestoemployee>
   <appliestogroup>F</appliestogroup>
   <appliestoothername>F</appliestoothername>
@@ -9,28 +9,28 @@
   <appliestopricelist>F</appliestopricelist>
   <appliestoprojecttemplate>F</appliestoprojecttemplate>
   <appliestostatement>F</appliestostatement>
-  <appliestovendor>F</appliestovendor>
+  <appliestovendor>T</appliestovendor>
   <appliestowebsite>F</appliestowebsite>
-  <applyformatting>F</applyformatting>
+  <applyformatting>T</applyformatting>
   <availableexternally>F</availableexternally>
   <checkspelling>F</checkspelling>
   <defaultchecked>F</defaultchecked>
   <defaultselection></defaultselection>
   <defaultvalue></defaultvalue>
-  <description>Check this check box if the current Customer is Holcim-related</description>
+  <description>A custom ID that Holcim uses to identify their carriers.</description>
   <displayheight></displayheight>
   <displaytype>NORMAL</displaytype>
   <displaywidth></displaywidth>
   <dynamicdefault></dynamicdefault>
   <enabletextenhance>F</enabletextenhance>
   <encryptatrest>F</encryptatrest>
-  <fieldtype>CHECKBOX</fieldtype>
-  <globalsearch>F</globalsearch>
-  <help>Check this check box if the current Customer is Holcim-related</help>
+  <fieldtype>INTEGER</fieldtype>
+  <globalsearch>T</globalsearch>
+  <help>A custom ID that Holcim uses to identify their carriers.</help>
   <isformula>F</isformula>
   <ismandatory>F</ismandatory>
   <isparent>F</isparent>
-  <label>Holcim</label>
+  <label>Holcim Carrier Code</label>
   <linktext></linktext>
   <maxlength></maxlength>
   <maxvalue></maxvalue>
