@@ -10,9 +10,9 @@
 import {log, search, https, runtime} from 'N';
 import {EntryPoints} from "N/types";
 import {getBOLNetsuiteData} from "./BOLNetsuiteData";
-import {mapGoogleSheetWithNetsuiteData} from "./BOLGoogleSheet";
+import {mapGoogleSheetWithNetsuiteData, BOLGoogleSheetLine, AccessToken} from "./BOLGoogleSheet";
 
-const sendToGoogleSheet = (lineData: any, accessTokens: any) => {
+const sendToGoogleSheet = (lineData: BOLGoogleSheetLine, accessTokens: AccessToken) => {
 
     // Get the Access Token from Script Parameter
     const {clientId, clientSecret, refreshToken, tokenUrl, sheetId, gsPageName} = accessTokens;
@@ -58,7 +58,7 @@ const sendToGoogleSheet = (lineData: any, accessTokens: any) => {
     } catch (error) {
         log.error(`Google Sheets API Error`, error);
     }
-}
+};
 
 
 
@@ -96,7 +96,7 @@ export const afterSubmit: EntryPoints.UserEvent.afterSubmit = (context: EntryPoi
     if (!bolData) return;
 
     const bolToSheet = mapGoogleSheetWithNetsuiteData(bolData);
-    const accessTokens = { clientId, clientSecret, refreshToken, tokenUrl, sheetId, gsPageName };
+    const accessTokens = { clientId, clientSecret, refreshToken, tokenUrl, sheetId, gsPageName } as AccessToken;
     
     log.debug({ title: `Google Sheet Data: `, details: JSON.stringify(bolToSheet) });
 
