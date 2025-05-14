@@ -23,6 +23,7 @@ export interface BOLNetsuiteData {
     custbody_trailer_id_number: string;
     custbody_mhi_gross_weight: number;
     custbody_netweight: number;
+    tare: number;
 }
 
 export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOLNetsuiteData | null {
@@ -90,14 +91,18 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
     if (!results.length) return null;
 
     const result = results[0];
+    const grossWeight = Number(result.custbody_mhi_gross_weight) || 0;
+    const netWeight = Number(result.custbody_netweight) || 0;
+    const tareWeight = grossWeight - netWeight;
+
     const data: BOLNetsuiteData = {
         recordId: result.id as number,
         recordNumber: result.tranid as string,
         recordDate: result.trandate as string,
-        entity: result.entity as number,
+        entity: Number(result.entity),
         tranid: result.tranid as string,
         customerName: result.customer_name as string,
-        holcimSoldTo: result.custentity_holcim_sold_to as number,
+        holcimSoldTo: Number(result.custentity_holcim_sold_to),
         city: result.city as string,
         country: result.country as string,
         custrecord_holcim_shipto_addres: result.custrecord_holcim_shipto_addres as string,
@@ -112,6 +117,7 @@ export function getBOLNetsuiteData(bolRecordId: number, soRecordId: number): BOL
         custbody_trailer_id_number: result.custbody_trailer_id_number as string,
         custbody_mhi_gross_weight: result.custbody_mhi_gross_weight as number,
         custbody_netweight: result.custbody_netweight as number,
+        tare: tareWeight,
     };
 
     return data;
@@ -140,5 +146,6 @@ export function exampleBOLNetsuiteData(): BOLNetsuiteData {
         custbody_trailer_id_number: `33`,
         custbody_mhi_gross_weight: 51555,
         custbody_netweight: 5105,
+        tare: 46450,
     };
 }

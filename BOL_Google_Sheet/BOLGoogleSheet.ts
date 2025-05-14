@@ -19,7 +19,7 @@ export interface BOLGoogleSheetLine {
     valuationCode: string;
     valuationDescription: string;
     silo: number;
-    tare: string;
+    tare: number;
     gross: number;
     net: number;
     mode: string;
@@ -58,7 +58,7 @@ export function mapGoogleSheetWithNetsuiteData(data: BOLNetsuiteData): BOLGoogle
         valuationCode: data.valuationCode,
         valuationDescription: ``, // blank - OK
         silo: data.silo,
-        tare: data.custbody_trailer_id_number,
+        tare: data.tare,
         gross: data.custbody_mhi_gross_weight,
         net: data.custbody_netweight,
         mode: `Truck`, // hardcoded - OK
@@ -87,7 +87,7 @@ export function exampleBOLGoogleSheetLine(): BOLGoogleSheetLine {
         valuationDescription: `Cement`,
         equipmentType: `5000056`,
         silo: 6015,
-        tare: `33`,
+        tare: 46450,
         gross: 51555,
         net: 5105,
         mode: `Truck`,
