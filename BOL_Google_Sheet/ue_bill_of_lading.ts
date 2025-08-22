@@ -24,9 +24,9 @@ const sendToGoogleSheet = (lineData: BOLGoogleSheetLine, accessTokens: AccessTok
 
     const responseToken = https.post({
         url: tokenUrl,
-        body: postBody,
+        body: postBody,  
         headers: { 'Content-Type': `application/x-www-form-urlencoded` }
-    });
+    }); 
 
     if (responseToken.code !== 200) {
         log.debug(`UE Error`, `The following response was received while trying to get AccessToken: ${JSON.stringify(responseToken)}`);
@@ -69,7 +69,9 @@ const isHolcimRelatedBOL = (customer: number) : boolean => {
 
 export const afterSubmit: EntryPoints.UserEvent.afterSubmit = (context: EntryPoints.UserEvent.afterSubmitContext) => {
 
-    if (context.type !== context.UserEventType.CREATE) return;
+    // if (context.type !== context.UserEventType.CREATE) return;
+    if (context.type !== context.UserEventType.EDIT) return;
+    
     
     const newRecord = context.newRecord;
     const customer = Number(newRecord.getValue(`entity`));
