@@ -69,8 +69,7 @@ const isHolcimRelatedBOL = (customer: number) : boolean => {
 
 export const afterSubmit: EntryPoints.UserEvent.afterSubmit = (context: EntryPoints.UserEvent.afterSubmitContext) => {
 
-    // if (context.type !== context.UserEventType.CREATE) return;
-    if (context.type !== context.UserEventType.EDIT) return;
+    if (context.type !== context.UserEventType.CREATE) return;
     
     
     const newRecord = context.newRecord;

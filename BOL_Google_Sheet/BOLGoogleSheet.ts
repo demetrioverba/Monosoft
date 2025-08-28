@@ -42,7 +42,7 @@ export interface AccessToken {
 export function mapGoogleSheetWithNetsuiteData(data: BOLNetsuiteData): BOLGoogleSheetLine {
 
     return {
-        entryDate: ``, // blank - OK
+        entryDate: `${new Date().getMonth() + 1}/${new Date().getDate()}/${new Date().getFullYear()}`,
         deliveryDate: data.recordDate,
         plantNumber: `5351`, // hardcoded - OK
         referenceBOL: data.recordNumber,
