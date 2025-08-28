@@ -1,0 +1,37 @@
+<othercustomfield scriptid="custrecord_holcim_shipto">
+  <accesslevel>2</accesslevel>
+  <applyformatting>T</applyformatting>
+  <applytoallforms>F</applytoallforms>
+  <checkspelling>F</checkspelling>
+  <defaultchecked>F</defaultchecked>
+  <defaultselection></defaultselection>
+  <defaultvalue></defaultvalue>
+  <description>Holcim Shitpo number - a custom ID used by Holcim to identify a specific delivery location of their customers. Applies only to Holcim-related address records</description>
+  <displayheight></displayheight>
+  <displaytype>NORMAL</displaytype>
+  <displaywidth></displaywidth>
+  <dynamicdefault></dynamicdefault>
+  <enabletextenhance>F</enabletextenhance>
+  <encryptatrest>F</encryptatrest>
+  <fieldtype>INTEGER</fieldtype>
+  <help></help>
+  <isformula>F</isformula>
+  <ismandatory>F</ismandatory>
+  <label>Holcim Shipto</label>
+  <linktext></linktext>
+  <maxlength></maxlength>
+  <maxvalue></maxvalue>
+  <minvalue></minvalue>
+  <onparentdelete></onparentdelete>
+  <rectype>-289</rectype>
+  <searchcomparefield></searchcomparefield>
+  <searchdefault></searchdefault>
+  <searchlevel>2</searchlevel>
+  <selectrecordtype></selectrecordtype>
+  <showhierarchy>F</showhierarchy>
+  <showinlist>F</showinlist>
+  <sourcefilterby></sourcefilterby>
+  <sourcefrom></sourcefrom>
+  <sourcelist></sourcelist>
+  <storevalue>T</storevalue>
+</othercustomfield>
